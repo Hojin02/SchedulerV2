@@ -7,10 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,7 +18,17 @@ public class ScheduleController {
     private final ScheduleSevice scheduleSevice;
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> addSchedule(@RequestBody ScheduleRequestDto dto){
-        return new ResponseEntity<>(scheduleSevice.addSchedule(dto), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleSevice.addSchedule(dto), HttpStatus.CREATED);
     }
+
+    @GetMapping
+    public ResponseEntity<List<ScheduleResponseDto>>findAllByTitleAndModifiedDate(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String updatedAt
+    ){
+        return new ResponseEntity<>(scheduleSevice.findAllByTitleAndModifiedDate(title,updatedAt),HttpStatus.OK);
+    }
+
+
 
 }
