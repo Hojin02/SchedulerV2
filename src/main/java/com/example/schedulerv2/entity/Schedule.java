@@ -1,9 +1,13 @@
 package com.example.schedulerv2.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "schedule")
+@NoArgsConstructor
+@Getter
 public class Schedule extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,4 +19,11 @@ public class Schedule extends BaseEntity{
     private String title;
     @Column(nullable = false,columnDefinition = "longtext")
     private String contents;
+
+    public Schedule(String userName, String title, String contents) {
+        this.userName = userName;
+        this.title = title;
+        this.contents = contents;
+    }
+
 }
