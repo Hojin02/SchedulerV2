@@ -7,6 +7,11 @@ import com.example.schedulerv2.scheduleDto.ScheduleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleSevice {
@@ -24,5 +29,19 @@ public class ScheduleServiceImpl implements ScheduleSevice {
                 savedSchedule.getContents(),
                 savedSchedule.getCreatedAt(),
                 savedSchedule.getUpdatedAt());
+    }
+
+    @Override
+    public List<ScheduleResponseDto> findAllByTitleAndModifiedDate(String title, String updatedAt) {
+        LocalDate localDate = null;
+
+        if (updatedAt != null && !updatedAt.isBlank()) {
+            localDate = LocalDate.parse(updatedAt);
+        }
+        List<Schedule> schedules = scheduleRepository.findAllByTitleAndUpdatedAt(title, localDate);
+
+        return schedules.stream()
+                .map(ScheduleResponseDto::toDto)
+                .collect(Collectors.toList());
     }
 }

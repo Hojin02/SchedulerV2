@@ -1,5 +1,6 @@
 package com.example.schedulerv2.scheduleDto;
 
+import com.example.schedulerv2.entity.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,5 +15,14 @@ public class ScheduleResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-
+    public static ScheduleResponseDto toDto(Schedule schedule){
+        return new ScheduleResponseDto(
+                schedule.getId(),
+                schedule.getUserName(),
+                schedule.getTitle(),
+                schedule.getContents(),
+                schedule.getCreatedAt(),
+                schedule.getCreatedAt()
+        );
+    }
 }
