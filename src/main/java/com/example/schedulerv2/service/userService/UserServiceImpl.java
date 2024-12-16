@@ -18,9 +18,9 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final EntityManager em;
     @Override
-    public UserResponseDto addUser(UserResponseDto dto) {
+    public UserResponseDto addUser(UserRequestDto dto) {
         User user = userRepository.save(
-                new User(dto.getUserName(),dto.getEmail())
+                new User(dto.getUserName(),dto.getEmail(), dto.getPassword())
         );
         return UserResponseDto.toDto(user);
     }

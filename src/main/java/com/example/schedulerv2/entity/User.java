@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "user")
 @NoArgsConstructor
 @Getter
-public class User extends BaseEntity{
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,12 +21,16 @@ public class User extends BaseEntity{
     @Email
     private String email;
 
-    public User(String userName, String email) {
+    @Column(nullable = false)
+    private String password;
+
+    public User(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
+        this.password = password;
     }
 
-    public void updateUserNameAndEmail(String userName, String email){
+    public void updateUserNameAndEmail(String userName, String email) {
         this.userName = userName;
         this.email = email;
     }
