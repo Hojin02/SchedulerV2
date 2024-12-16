@@ -1,5 +1,6 @@
 package com.example.schedulerv2.entity;
 
+import com.example.schedulerv2.scheduleDto.ScheduleUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "schedule")
 @NoArgsConstructor
 @Getter
-public class Schedule extends BaseEntity{
+public class Schedule extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,13 +18,18 @@ public class Schedule extends BaseEntity{
     private String userName;
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false,columnDefinition = "longtext")
+    @Column(nullable = false, columnDefinition = "longtext")
     private String contents;
 
     public Schedule(String userName, String title, String contents) {
         this.userName = userName;
         this.title = title;
         this.contents = contents;
+    }
+
+    public void UpdateTitleAndContents(ScheduleUpdateRequestDto dto) {
+        this.title = dto.getTitle();
+        this.contents = dto.getContents();
     }
 
 }
