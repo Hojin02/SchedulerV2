@@ -5,9 +5,12 @@ import com.example.schedulerv2.scheduleDto.ScheduleResponseDto;
 
 import java.util.List;
 
-public interface ScheduleSevice {
+public interface ScheduleService {
 
     ScheduleResponseDto addSchedule(ScheduleRequestDto dto);
 
     List<ScheduleResponseDto> findAllByTitleAndModifiedDate(String title, String updatedAt);
+
+
+    ScheduleResponseDto findScheduleById(Long id);
 }

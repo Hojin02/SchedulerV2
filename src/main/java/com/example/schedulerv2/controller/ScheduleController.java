@@ -2,7 +2,7 @@ package com.example.schedulerv2.controller;
 
 import com.example.schedulerv2.scheduleDto.ScheduleRequestDto;
 import com.example.schedulerv2.scheduleDto.ScheduleResponseDto;
-import com.example.schedulerv2.service.schduleService.ScheduleSevice;
+import com.example.schedulerv2.service.schduleService.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/schedules")
 public class ScheduleController {
-    private final ScheduleSevice scheduleSevice;
+    private final ScheduleService scheduleService;
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> addSchedule(@RequestBody ScheduleRequestDto dto){
-        return new ResponseEntity<>(scheduleSevice.addSchedule(dto), HttpStatus.CREATED);
+        return new ResponseEntity<>(scheduleService.addSchedule(dto), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -26,9 +26,13 @@ public class ScheduleController {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String updatedAt
     ){
-        return new ResponseEntity<>(scheduleSevice.findAllByTitleAndModifiedDate(title,updatedAt),HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.findAllByTitleAndModifiedDate(title,updatedAt),HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id){
+        return new ResponseEntity<>(scheduleService.findScheduleById(id),HttpStatus.OK);
+    }
 
 
 }

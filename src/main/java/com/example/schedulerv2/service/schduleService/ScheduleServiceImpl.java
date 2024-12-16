@@ -8,13 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleServiceImpl implements ScheduleSevice {
+public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
     @Override
@@ -22,13 +21,7 @@ public class ScheduleServiceImpl implements ScheduleSevice {
         Schedule savedSchedule = scheduleRepository.save(
                 new Schedule(dto.getUserName(), dto.getTitle(), dto.getContents())
         );
-        return new ScheduleResponseDto(
-                savedSchedule.getId(),
-                savedSchedule.getUserName(),
-                savedSchedule.getTitle(),
-                savedSchedule.getContents(),
-                savedSchedule.getCreatedAt(),
-                savedSchedule.getUpdatedAt());
+        return ScheduleResponseDto.toDto(savedSchedule);
     }
 
     @Override
@@ -43,5 +36,11 @@ public class ScheduleServiceImpl implements ScheduleSevice {
         return schedules.stream()
                 .map(ScheduleResponseDto::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ScheduleResponseDto findScheduleById(Long id) {
+        Schedule schedule =scheduleRepository.findByIdOrElseThrow(id);
+        return ScheduleResponseDto.toDto(schedule);
     }
 }
