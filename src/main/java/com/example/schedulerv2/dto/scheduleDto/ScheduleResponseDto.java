@@ -1,4 +1,4 @@
-package com.example.schedulerv2.scheduleDto;
+package com.example.schedulerv2.dto.scheduleDto;
 
 import com.example.schedulerv2.entity.Schedule;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.example.schedulerv2.entity;
 
-import com.example.schedulerv2.scheduleDto.ScheduleUpdateRequestDto;
+import com.example.schedulerv2.dto.scheduleDto.ScheduleUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

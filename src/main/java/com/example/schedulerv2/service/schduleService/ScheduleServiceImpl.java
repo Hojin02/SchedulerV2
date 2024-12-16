@@ -2,9 +2,9 @@ package com.example.schedulerv2.service.schduleService;
 
 import com.example.schedulerv2.entity.Schedule;
 import com.example.schedulerv2.repository.scheduleRepository.ScheduleRepository;
-import com.example.schedulerv2.scheduleDto.ScheduleRequestDto;
-import com.example.schedulerv2.scheduleDto.ScheduleResponseDto;
-import com.example.schedulerv2.scheduleDto.ScheduleUpdateRequestDto;
+import com.example.schedulerv2.dto.scheduleDto.ScheduleRequestDto;
+import com.example.schedulerv2.dto.scheduleDto.ScheduleResponseDto;
+import com.example.schedulerv2.dto.scheduleDto.ScheduleUpdateRequestDto;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
