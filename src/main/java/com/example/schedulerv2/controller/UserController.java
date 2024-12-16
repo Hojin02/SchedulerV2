@@ -1,5 +1,6 @@
 package com.example.schedulerv2.controller;
 
+import com.example.schedulerv2.dto.userDto.UserRequestDto;
 import com.example.schedulerv2.dto.userDto.UserResponseDto;
 import com.example.schedulerv2.service.userService.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,11 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id){
         return new ResponseEntity<>(userService.findUserById(id),HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponseDto> modifyUserById(@PathVariable Long id, @RequestBody UserRequestDto dto){
+        return new ResponseEntity<>(userService.modifyUserById(id,dto),HttpStatus.OK);
+
     }
 }
