@@ -24,5 +24,9 @@ public class UserController {
         return new ResponseEntity<>(userService.addUser(dto), HttpStatus.CREATED);
     }
 
+    @GetMapping
+    public ResponseEntity<List<UserResponseDto>> findAllUser(){
+        return new ResponseEntity<>(userService.findAllUser(),HttpStatus.OK);
+    }
 
 }
