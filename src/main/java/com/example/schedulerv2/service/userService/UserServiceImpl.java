@@ -1,10 +1,12 @@
 package com.example.schedulerv2.service.userService;
 
+import com.example.schedulerv2.dto.userDto.UserRequestDto;
 import com.example.schedulerv2.dto.userDto.UserResponseDto;
 import com.example.schedulerv2.entity.User;
 import com.example.schedulerv2.repository.userRepository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +35,14 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserResponseDto findUserById(Long id) {
         User user = userRepository.findByIdOrElseThrow(id);
+        return UserResponseDto.toDto(user);
+    }
+
+    @Transactional
+    @Override
+    public UserResponseDto modifyUserById(Long id, UserRequestDto dto) {
+        User user = userRepository.findByIdOrElseThrow(id);
+        user.updateUserNameAndEmail(dto.getUserName(),dto.getEmail());
         return UserResponseDto.toDto(user);
     }
 }
