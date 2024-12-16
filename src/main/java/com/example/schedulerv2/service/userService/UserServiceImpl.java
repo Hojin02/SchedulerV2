@@ -4,6 +4,7 @@ import com.example.schedulerv2.dto.userDto.UserRequestDto;
 import com.example.schedulerv2.dto.userDto.UserResponseDto;
 import com.example.schedulerv2.entity.User;
 import com.example.schedulerv2.repository.userRepository.UserRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
+    private final EntityManager em;
     @Override
     public UserResponseDto addUser(UserResponseDto dto) {
         User user = userRepository.save(
@@ -43,6 +45,13 @@ public class UserServiceImpl implements UserService{
     public UserResponseDto modifyUserById(Long id, UserRequestDto dto) {
         User user = userRepository.findByIdOrElseThrow(id);
         user.updateUserNameAndEmail(dto.getUserName(),dto.getEmail());
+        em.flush();
         return UserResponseDto.toDto(user);
+    }
+
+    @Override
+    public void deleteUserById(Long id) {
+        User user = userRepository.findByIdOrElseThrow(id);
+        userRepository.delete(user);
     }
 }

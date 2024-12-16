@@ -13,4 +13,6 @@ public interface UserService {
     UserResponseDto findUserById(Long id);
 
     UserResponseDto modifyUserById(Long id, UserRequestDto dto);
+
+    void deleteUserById(Long id);
 }
