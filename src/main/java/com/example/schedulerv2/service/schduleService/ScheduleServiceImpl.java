@@ -56,4 +56,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         em.flush();//변경사항 즉시 반영
         return ScheduleResponseDto.toDto(schedule);
     }
+
+    @Override
+    public void deleteScheduleById(Long id) {
+        Schedule schedule = scheduleRepository.findByIdOrElseThrow(id);
+        scheduleRepository.delete(schedule);
+    }
 }
