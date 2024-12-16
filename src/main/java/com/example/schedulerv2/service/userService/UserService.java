@@ -8,4 +8,6 @@ public interface UserService {
     UserResponseDto addUser(UserResponseDto dto);
 
     List<UserResponseDto> findAllUser();
+
+    UserResponseDto findUserById(Long id);
 }
