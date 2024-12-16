@@ -29,4 +29,10 @@ public class UserServiceImpl implements UserService{
                 .collect(Collectors.toList());
 
     }
+
+    @Override
+    public UserResponseDto findUserById(Long id) {
+        User user = userRepository.findByIdOrElseThrow(id);
+        return UserResponseDto.toDto(user);
+    }
 }
