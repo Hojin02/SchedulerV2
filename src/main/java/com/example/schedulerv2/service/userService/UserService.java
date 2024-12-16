@@ -7,4 +7,5 @@ import java.util.List;
 public interface UserService {
     UserResponseDto addUser(UserResponseDto dto);
 
+    List<UserResponseDto> findAllUser();
 }

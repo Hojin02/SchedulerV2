@@ -6,6 +6,9 @@ import com.example.schedulerv2.repository.userRepository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
@@ -18,4 +21,12 @@ public class UserServiceImpl implements UserService{
         return UserResponseDto.toDto(user);
     }
 
+    @Override
+    public List<UserResponseDto> findAllUser() {
+        List<User> users= userRepository.findAll();
+        return  users.stream()
+                .map(UserResponseDto::toDto)
+                .collect(Collectors.toList());
+
+    }
 }
