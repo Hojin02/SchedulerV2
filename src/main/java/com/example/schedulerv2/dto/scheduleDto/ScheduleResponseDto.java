@@ -16,10 +16,10 @@ public class ScheduleResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public static ScheduleResponseDto toDto(Schedule schedule,String userName){
+    public static ScheduleResponseDto toDto(Schedule schedule){
         return new ScheduleResponseDto(
                 schedule.getId(),
-                userName,
+                schedule.getUser().getUserName(),
                 schedule.getTitle(),
                 schedule.getContents(),
                 schedule.getCreatedAt(),

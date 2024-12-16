@@ -10,13 +10,13 @@ public interface ScheduleService {
 
     ScheduleResponseDto addSchedule(ScheduleRequestDto dto);
 
-//    List<ScheduleResponseDto> findAllByTitleAndModifiedDate(String title, String updatedAt);
-//
-//
-//    ScheduleResponseDto findScheduleById(Long id);
-//
-//    ScheduleResponseDto modifyScheduleById(Long id,ScheduleUpdateRequestDto dto);
-//
-//    void deleteScheduleById(Long id);
+    List<ScheduleResponseDto> findAllByTitleAndModifiedDate(String title, String updatedAt);
+
+
+    ScheduleResponseDto findScheduleById(Long id);
+
+    ScheduleResponseDto modifyScheduleById(Long id,ScheduleUpdateRequestDto dto);
+
+    void deleteScheduleById(Long id);
 
 }
