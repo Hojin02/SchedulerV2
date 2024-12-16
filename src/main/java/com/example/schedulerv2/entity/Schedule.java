@@ -4,6 +4,7 @@ import com.example.schedulerv2.dto.scheduleDto.ScheduleUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "schedule")
@@ -15,16 +16,19 @@ public class Schedule extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String userName;
-    @Column(nullable = false)
     private String title;
+
     @Column(nullable = false, columnDefinition = "longtext")
     private String contents;
 
-    public Schedule(String userName, String title, String contents) {
-        this.userName = userName;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
+
+    public Schedule(String title, String contents,User user) {
         this.title = title;
         this.contents = contents;
+        this.user = user;
     }
 
     public void UpdateTitleAndContents(ScheduleUpdateRequestDto dto) {

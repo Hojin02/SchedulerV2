@@ -7,6 +7,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
+
 public class ScheduleResponseDto {
     private final Long id;
     private final String userName;
@@ -15,10 +16,10 @@ public class ScheduleResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public static ScheduleResponseDto toDto(Schedule schedule){
+    public static ScheduleResponseDto toDto(Schedule schedule,String userName){
         return new ScheduleResponseDto(
                 schedule.getId(),
-                schedule.getUserName(),
+                userName,
                 schedule.getTitle(),
                 schedule.getContents(),
                 schedule.getCreatedAt(),
