@@ -22,28 +22,28 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.addSchedule(dto), HttpStatus.CREATED);
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<ScheduleResponseDto>>findAllByTitleAndModifiedDate(
-//            @RequestParam(required = false) String title,
-//            @RequestParam(required = false) String updatedAt
-//    ){
-//        return new ResponseEntity<>(scheduleService.findAllByTitleAndModifiedDate(title,updatedAt),HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id){
-//        return new ResponseEntity<>(scheduleService.findScheduleById(id),HttpStatus.OK);
-//    }
-//
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<ScheduleResponseDto> modifyScheduleById(@PathVariable Long id,@RequestBody ScheduleUpdateRequestDto dto){
-//        return new ResponseEntity<>(scheduleService.modifyScheduleById(id,dto),HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteScheduleById(@PathVariable Long id){
-//        scheduleService.deleteScheduleById(id);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @GetMapping
+    public ResponseEntity<List<ScheduleResponseDto>>findAllByTitleAndModifiedDate(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String updatedAt
+    ){
+        return new ResponseEntity<>(scheduleService.findAllByTitleAndModifiedDate(title,updatedAt),HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id){
+        return new ResponseEntity<>(scheduleService.findScheduleById(id),HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> modifyScheduleById(@PathVariable Long id,@RequestBody ScheduleUpdateRequestDto dto){
+        return new ResponseEntity<>(scheduleService.modifyScheduleById(id,dto),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteScheduleById(@PathVariable Long id){
+        scheduleService.deleteScheduleById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }
