@@ -2,6 +2,7 @@ package com.example.schedulerv2.controller;
 
 import com.example.schedulerv2.scheduleDto.ScheduleRequestDto;
 import com.example.schedulerv2.scheduleDto.ScheduleResponseDto;
+import com.example.schedulerv2.scheduleDto.ScheduleUpdateRequestDto;
 import com.example.schedulerv2.service.schduleService.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,11 @@ public class ScheduleController {
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id){
         return new ResponseEntity<>(scheduleService.findScheduleById(id),HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> modifyScheduleById(@PathVariable Long id,@RequestBody ScheduleUpdateRequestDto dto){
+        return new ResponseEntity<>(scheduleService.modifyScheduleById(id,dto),HttpStatus.OK);
     }
 
 
