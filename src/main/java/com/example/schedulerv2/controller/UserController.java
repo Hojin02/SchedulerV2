@@ -5,6 +5,7 @@ import com.example.schedulerv2.dto.userDto.UserRequestDto;
 import com.example.schedulerv2.dto.userDto.UserResponseDto;
 import com.example.schedulerv2.service.userService.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class UserController {
 //        return new ResponseEntity<>(userService.addUser(dto), HttpStatus.CREATED);
 //    }
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> registerUser(@RequestBody UserRequestDto dto){
+    public ResponseEntity<UserResponseDto> registerUser(@Valid @RequestBody UserRequestDto dto){
         return new ResponseEntity<>(userService.addUser(dto), HttpStatus.CREATED);
     }
 
@@ -56,7 +57,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/logout")
     public void logoutUser(){
         userService.logout();
     }
