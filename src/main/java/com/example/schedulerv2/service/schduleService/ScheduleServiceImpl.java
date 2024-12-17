@@ -8,6 +8,7 @@ import com.example.schedulerv2.dto.scheduleDto.ScheduleResponseDto;
 import com.example.schedulerv2.dto.scheduleDto.ScheduleUpdateRequestDto;
 import com.example.schedulerv2.repository.userRepository.UserRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +23,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
     private final EntityManager em;
+    private final HttpSession session;
 
     @Override
     public ScheduleResponseDto addSchedule(ScheduleRequestDto dto) {
-        User user = userRepository.findUserByUserNameOrElseThrow(dto.getUserName());
+        User user = userRepository.findUserByEmail((String)session.getAttribute("userEmail"));
         Schedule savedSchedule = scheduleRepository.save(
                 new Schedule(dto.getTitle(), dto.getContents(),user)
         );
