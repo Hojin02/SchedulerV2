@@ -1,5 +1,6 @@
 package com.example.schedulerv2.controller;
 
+import com.example.schedulerv2.dto.userDto.UserLoginRequestDto;
 import com.example.schedulerv2.dto.userDto.UserRequestDto;
 import com.example.schedulerv2.dto.userDto.UserResponseDto;
 import com.example.schedulerv2.service.userService.UserService;
@@ -17,9 +18,19 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto dto){
+//    @PostMapping
+//    public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto dto){
+//        return new ResponseEntity<>(userService.addUser(dto), HttpStatus.CREATED);
+//    }
+    @PostMapping("/register")
+    public ResponseEntity<UserResponseDto> registerUser(@RequestBody UserRequestDto dto){
         return new ResponseEntity<>(userService.addUser(dto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> loginUser(@RequestBody UserLoginRequestDto dto){
+        userService.loginUser(dto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
