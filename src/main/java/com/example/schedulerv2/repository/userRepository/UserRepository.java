@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findUserByUserName(String username);
     Optional<User> findByEmail(String email);
+    boolean existsByEmail(String email);
     default User findByIdOrElseThrow(Long id){
         return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no schedule for this id."));
     }

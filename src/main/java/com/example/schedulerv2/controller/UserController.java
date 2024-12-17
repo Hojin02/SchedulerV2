@@ -4,6 +4,7 @@ import com.example.schedulerv2.dto.userDto.UserLoginRequestDto;
 import com.example.schedulerv2.dto.userDto.UserRequestDto;
 import com.example.schedulerv2.dto.userDto.UserResponseDto;
 import com.example.schedulerv2.service.userService.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> loginUser(@RequestBody UserLoginRequestDto dto){
+    public ResponseEntity<Void> loginUser(@RequestBody UserLoginRequestDto dto,HttpSession session){
         userService.loginUser(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

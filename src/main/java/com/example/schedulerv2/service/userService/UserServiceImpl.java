@@ -26,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto addUser(UserRequestDto dto) {
+        if(userRepository.existsByEmail(dto.getEmail())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"This email already exists.");
+        }
         User user = userRepository.save(
                 new User(dto.getUserName(), dto.getEmail(), dto.getPassword())
         );
