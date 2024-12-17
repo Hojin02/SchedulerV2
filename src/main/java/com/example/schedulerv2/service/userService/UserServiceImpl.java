@@ -1,5 +1,6 @@
 package com.example.schedulerv2.service.userService;
 
+import com.example.schedulerv2.config.PasswordEncoder;
 import com.example.schedulerv2.dto.userDto.UserLoginRequestDto;
 import com.example.schedulerv2.dto.userDto.UserRequestDto;
 import com.example.schedulerv2.dto.userDto.UserResponseDto;
@@ -23,14 +24,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final EntityManager em;
     private final HttpSession session;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponseDto addUser(UserRequestDto dto) {
         if(userRepository.existsByEmail(dto.getEmail())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"This email already exists.");
         }
+        String encodePassword=passwordEncoder.encode(dto.getPassword());
         User user = userRepository.save(
-                new User(dto.getUserName(), dto.getEmail(), dto.getPassword())
+                new User(dto.getUserName(), dto.getEmail(), encodePassword)
         );
         return UserResponseDto.toDto(user);
     }
@@ -40,7 +43,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findByEmail(dto.getEmail());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (user.getPassword().equals(dto.getPassword())) {
+            if (passwordEncoder.matches(dto.getPassword(),user.getPassword())) {
                 session.setAttribute("userEmail",user.getEmail());
             }
         }else{
