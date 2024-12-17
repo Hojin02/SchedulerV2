@@ -2,10 +2,10 @@ package com.example.schedulerv2.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.PatternMatchUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
@@ -18,6 +18,8 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+
         String requestURI = httpRequest.getRequestURI();
         String method = httpRequest.getMethod();
 
@@ -26,7 +28,10 @@ public class LoginFilter implements Filter {
             HttpSession session = httpRequest.getSession(false);
 
             if (session == null || session.getAttribute("userEmail") == null) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Log in is required.");
+                httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+                httpResponse.setContentType("application/json");
+                httpResponse.getWriter().write("{\"error\": \"Log in is required.\"}");
+                return;
             }
         }
         chain.doFilter(request, response);

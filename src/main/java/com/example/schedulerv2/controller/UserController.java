@@ -55,4 +55,9 @@ public class UserController {
         userService.deleteUserById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping
+    public void logoutUser(){
+        userService.logout();
+    }
 }
