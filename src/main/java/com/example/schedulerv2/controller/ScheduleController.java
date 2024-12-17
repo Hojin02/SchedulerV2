@@ -2,8 +2,8 @@ package com.example.schedulerv2.controller;
 
 import com.example.schedulerv2.dto.scheduleDto.ScheduleRequestDto;
 import com.example.schedulerv2.dto.scheduleDto.ScheduleResponseDto;
-import com.example.schedulerv2.dto.scheduleDto.ScheduleUpdateRequestDto;
 import com.example.schedulerv2.service.schduleService.ScheduleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.List;
 public class ScheduleController {
     private final ScheduleService scheduleService;
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> addSchedule(@RequestBody ScheduleRequestDto dto){
+    public ResponseEntity<ScheduleResponseDto> addSchedule(@Valid  @RequestBody ScheduleRequestDto dto){
         return new ResponseEntity<>(scheduleService.addSchedule(dto), HttpStatus.CREATED);
     }
 
@@ -36,7 +36,7 @@ public class ScheduleController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDto> modifyScheduleById(@PathVariable Long id,@RequestBody ScheduleUpdateRequestDto dto){
+    public ResponseEntity<ScheduleResponseDto> modifyScheduleById(@PathVariable Long id,@Valid @RequestBody ScheduleRequestDto dto){
         return new ResponseEntity<>(scheduleService.modifyScheduleById(id,dto),HttpStatus.OK);
     }
 

@@ -5,7 +5,6 @@ import com.example.schedulerv2.entity.User;
 import com.example.schedulerv2.repository.scheduleRepository.ScheduleRepository;
 import com.example.schedulerv2.dto.scheduleDto.ScheduleRequestDto;
 import com.example.schedulerv2.dto.scheduleDto.ScheduleResponseDto;
-import com.example.schedulerv2.dto.scheduleDto.ScheduleUpdateRequestDto;
 import com.example.schedulerv2.repository.userRepository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
@@ -57,7 +56,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional
-    public ScheduleResponseDto modifyScheduleById(Long id, ScheduleUpdateRequestDto dto) {
+    public ScheduleResponseDto modifyScheduleById(Long id, ScheduleRequestDto dto) {
         Schedule schedule = scheduleRepository.findByIdOrElseThrow(id);
         schedule.UpdateTitleAndContents(dto);
         em.flush();//변경사항 즉시 반영

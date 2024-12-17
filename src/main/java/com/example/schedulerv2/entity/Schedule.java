@@ -1,10 +1,9 @@
 package com.example.schedulerv2.entity;
 
-import com.example.schedulerv2.dto.scheduleDto.ScheduleUpdateRequestDto;
+import com.example.schedulerv2.dto.scheduleDto.ScheduleRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "schedule")
@@ -31,7 +30,7 @@ public class Schedule extends BaseEntity {
         this.user = user;
     }
 
-    public void UpdateTitleAndContents(ScheduleUpdateRequestDto dto) {
+    public void UpdateTitleAndContents(ScheduleRequestDto dto) {
         this.title = dto.getTitle();
         this.contents = dto.getContents();
     }

@@ -2,7 +2,6 @@ package com.example.schedulerv2.service.schduleService;
 
 import com.example.schedulerv2.dto.scheduleDto.ScheduleRequestDto;
 import com.example.schedulerv2.dto.scheduleDto.ScheduleResponseDto;
-import com.example.schedulerv2.dto.scheduleDto.ScheduleUpdateRequestDto;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ public interface ScheduleService {
 
     ScheduleResponseDto findScheduleById(Long id);
 
-    ScheduleResponseDto modifyScheduleById(Long id,ScheduleUpdateRequestDto dto);
+    ScheduleResponseDto modifyScheduleById(Long id,ScheduleRequestDto dto);
 
     void deleteScheduleById(Long id);
 
