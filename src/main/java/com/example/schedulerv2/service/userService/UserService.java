@@ -18,4 +18,6 @@ public interface UserService {
     void deleteUserById(Long id);
 
     void loginUser(UserLoginRequestDto dto);
+
+    void logout();
 }

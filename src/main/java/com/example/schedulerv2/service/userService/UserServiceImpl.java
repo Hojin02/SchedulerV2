@@ -44,8 +44,12 @@ public class UserServiceImpl implements UserService {
                 session.setAttribute("userEmail",user.getEmail());
             }
         }else{
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Email or password does not match.");
+           session.invalidate();
         }
+    }
+
+    public void logout() {
+        session.invalidate();
     }
 
     @Override
