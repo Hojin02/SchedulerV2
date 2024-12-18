@@ -40,6 +40,12 @@ public class CommentController {
         return new ResponseEntity<>(commentService.modifyCommentById(id,dto),HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCommentById(@PathVariable Long id){
+        commentService.deleteCommentById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 }
 
