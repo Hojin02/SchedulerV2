@@ -5,6 +5,9 @@ import com.example.schedulerv2.dto.scheduleDto.ScheduleResponseDto;
 import com.example.schedulerv2.service.schduleService.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,11 +26,12 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>>findAllByTitleAndModifiedDate(
+    public ResponseEntity<Page<ScheduleResponseDto>>findAllByTitleAndModifiedDate(
             @RequestParam(required = false) String title,
-            @RequestParam(required = false) String updatedAt
+            @RequestParam(required = false) String updatedAt,
+            @PageableDefault(size = 10) Pageable pageable
     ){
-        return new ResponseEntity<>(scheduleService.findAllByTitleAndModifiedDate(title,updatedAt),HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.findAllByTitleAndModifiedDate(title,updatedAt,pageable),HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

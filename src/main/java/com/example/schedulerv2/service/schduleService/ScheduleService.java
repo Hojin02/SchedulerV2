@@ -2,6 +2,8 @@ package com.example.schedulerv2.service.schduleService;
 
 import com.example.schedulerv2.dto.scheduleDto.ScheduleRequestDto;
 import com.example.schedulerv2.dto.scheduleDto.ScheduleResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -9,7 +11,7 @@ public interface ScheduleService {
 
     ScheduleResponseDto addSchedule(ScheduleRequestDto dto);
 
-    List<ScheduleResponseDto> findAllByTitleAndModifiedDate(String title, String updatedAt);
+    Page<ScheduleResponseDto> findAllByTitleAndModifiedDate(String title, String updatedAt, Pageable pageable);
 
 
     ScheduleResponseDto findScheduleById(Long id);
