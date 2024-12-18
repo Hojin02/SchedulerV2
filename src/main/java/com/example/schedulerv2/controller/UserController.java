@@ -58,7 +58,9 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public void logoutUser(){
+    public ResponseEntity<Void>  logoutUser(){
+        System.out.println("??????????");
         userService.logout();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
