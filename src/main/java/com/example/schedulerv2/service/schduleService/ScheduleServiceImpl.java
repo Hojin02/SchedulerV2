@@ -9,6 +9,8 @@ import com.example.schedulerv2.repository.userRepository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,17 +37,15 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllByTitleAndModifiedDate(String title, String updatedAt) {
+    public Page<ScheduleResponseDto> findAllByTitleAndModifiedDate(String title, String updatedAt, Pageable pageable) {
         LocalDate localDate = null;
 
         if (updatedAt != null && !updatedAt.isBlank()) {
             localDate = LocalDate.parse(updatedAt);
         }
-        List<Schedule> schedules = scheduleRepository.findAllByTitleAndUpdatedAt(title, localDate);
+        Page<Schedule> schedules = scheduleRepository.findAllByTitleAndUpdatedAt(title, localDate,pageable);
 
-        return schedules.stream()
-                .map(ScheduleResponseDto::toDto)
-                .collect(Collectors.toList());
+        return schedules.map(ScheduleResponseDto::toDto);
     }
 
     @Override
@@ -67,6 +67,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public void deleteScheduleById(Long id) {
         Schedule schedule = scheduleRepository.findByIdOrElseThrow(id);
         scheduleRepository.delete(schedule);
+
     }
 
 
