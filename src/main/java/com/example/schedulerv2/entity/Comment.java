@@ -1,5 +1,6 @@
 package com.example.schedulerv2.entity;
 
+import com.example.schedulerv2.dto.commentDto.CommentUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,5 +28,9 @@ public class Comment extends BaseEntity{
         this.contents = contents;
         this.schedule = schedule;
         this.user = user;
+    }
+
+    public void updateContents(String contents) {
+        this.contents = contents;
     }
 }
