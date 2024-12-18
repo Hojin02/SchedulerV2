@@ -12,7 +12,12 @@ import com.example.schedulerv2.service.commentRepository.CommentReopsitory;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +35,23 @@ public class CommentServiceImpl implements CommentService{
                 new Comment(dto.getContents(), schedule,user)
         );
         return CommentResponseDto.toDto(comment);
+    }
+
+    @Override
+    public CommentResponseDto findCommentById(Long id) {
+        Comment comment = commentReopsitory.findByIdOrElseThrow(id);
+        return CommentResponseDto.toDto(comment);
+    }
+
+    @Override
+    public List<CommentResponseDto> findAllComment() {
+        List<Comment> comments = commentReopsitory.findAll();
+        if(comments.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There are no comments.");
+        }
+
+        return comments.stream()
+                .map(CommentResponseDto::toDto)
+                .collect(Collectors.toList());
     }
 }

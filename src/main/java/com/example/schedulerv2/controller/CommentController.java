@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/comments")
@@ -20,5 +22,16 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> addComment(@Valid @RequestBody CommentRequest dto) {
         return new ResponseEntity<>(commentService.addComment(dto), HttpStatus.CREATED);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CommentResponseDto> findCommentById(@PathVariable Long id){
+        return new ResponseEntity<>(commentService.findCommentById(id),HttpStatus.OK);
+    }
+    @GetMapping
+    public ResponseEntity<List<CommentResponseDto>> findAllComment(){
+        return new ResponseEntity<>(commentService.findAllComment(),HttpStatus.OK);
+    }
+
+
 }
 

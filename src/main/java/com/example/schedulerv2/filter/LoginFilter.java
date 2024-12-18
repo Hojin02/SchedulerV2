@@ -12,7 +12,7 @@ import java.io.IOException;
 public class LoginFilter implements Filter {
 
 
-    private static final String[] WHITE_LIST = {"/", "/users/register","/users/login"};
+    private static final String[] WHITE_LIST = {"/", "/users/register","/users/login","/schedules*","/comments*"};
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
