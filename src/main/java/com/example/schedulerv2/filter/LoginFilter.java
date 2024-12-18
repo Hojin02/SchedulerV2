@@ -38,7 +38,10 @@ public class LoginFilter implements Filter {
     }
 
     private boolean isWhiteList(String requestURI, String method) {
-        if (requestURI.startsWith("/schedules") && !"GET".equals(method)) {
+        Boolean isScheduleNonGetRequest = requestURI.startsWith("/schedules") && !"GET".equals(method);
+        Boolean isCommentNonGetRequest = requestURI.startsWith("/comments") && !"GET".equals(method);
+
+        if (isScheduleNonGetRequest || isCommentNonGetRequest) {
             return false;
         }
         return PatternMatchUtils.simpleMatch(WHITE_LIST, requestURI);
