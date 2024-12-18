@@ -2,6 +2,9 @@ package com.example.schedulerv2.controller;
 
 import com.example.schedulerv2.dto.commentDto.CommentRequest;
 import com.example.schedulerv2.dto.commentDto.CommentResponseDto;
+import com.example.schedulerv2.dto.commentDto.CommentUpdateRequestDto;
+import com.example.schedulerv2.dto.scheduleDto.ScheduleRequestDto;
+import com.example.schedulerv2.dto.scheduleDto.ScheduleResponseDto;
 import com.example.schedulerv2.service.commentService.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,11 @@ public class CommentController {
     @GetMapping
     public ResponseEntity<List<CommentResponseDto>> findAllComment(){
         return new ResponseEntity<>(commentService.findAllComment(),HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CommentResponseDto> modifyCommentById(@PathVariable Long id, @Valid @RequestBody CommentUpdateRequestDto dto){
+        return new ResponseEntity<>(commentService.modifyCommentById(id,dto),HttpStatus.OK);
     }
 
 
