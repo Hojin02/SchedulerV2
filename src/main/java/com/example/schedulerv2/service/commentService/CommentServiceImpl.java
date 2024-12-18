@@ -66,4 +66,10 @@ public class CommentServiceImpl implements CommentService {
         em.flush();
         return CommentResponseDto.toDto(comment);
     }
+
+    @Override
+    public void deleteCommentById(Long id) {
+        Comment comment = commentReopsitory.findByIdOrElseThrow(id);
+        commentReopsitory.delete(comment);
+    }
 }
