@@ -1,13 +1,13 @@
-![image](https://github.com/user-attachments/assets/f3cacc78-7285-4bf0-8ca1-64b184eb1d68)# Spring - JPA 프로젝트 SchedulerV2
+# Spring - JPA 프로젝트 SchedulerV2
 
 ## 🗒︎ Index
 -  🎞️ 구조
   - API 명세
   -  ERD
   -  ✈️ 기능
-  -  - [유저](유저-기능)
-     - [일정](일정-기능)
-     - [댓글](댓글-기능)
+  -  - [유저](#유저-기능)
+     - [일정](#일정-기능)
+     - [댓글](#댓글-기능)
   -  ⚠️ 트러블 슈팅
   -  😼 후기
 
