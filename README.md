@@ -9,7 +9,7 @@
      - [일정](#일정-기능)
      - [댓글](#댓글-기능)
   -  ⚠️ [트러블 슈팅](#troubleshooting)
-  -  😼 [후기](#후기)(#review)
+  -  😼 [후기](#review)
 
 ## SchedulerV2 API 명세
 ![image](https://github.com/user-attachments/assets/3c74748e-4b0f-4207-bd75-27c8439cfd57)
@@ -106,6 +106,10 @@ public class LoginFilter implements Filter {
 ![image](https://github.com/user-attachments/assets/4aef82df-7828-411d-9f99-29114aa2deb8)
 
 ## 유저 기능
+
+<details>
+  <summary>펼쳐보기</summary>
+  
 ### 2. 유저 회원가입
 > 일정 추가, 수정, 삭제 기능은 회원 전용 서비스 이기 때문에 회원가입이 필요함.  
  ---
@@ -141,8 +145,13 @@ Class User
 > 로그인 된 상태에서 유저가 로그아웃을 하면, 세션에 저장된 유저 정보가 무효화됨.  
 ![image](https://github.com/user-attachments/assets/39717c81-e902-4b0c-8b0a-82e6776a9c20)  
 
+</details>
+
 ## 일정 기능
 
+<details>
+  <summary>펼쳐보기</summary>
+  
 ### 7. 일정 추가
 > 로그인 필수, 사용자가 입력한 일정 정보와 세션에 있는 유저정보가 일정테이블에 저장된다.  
 ![image](https://github.com/user-attachments/assets/ae7b69b3-2571-4fc4-81c4-0abb3f1a4819)
@@ -164,8 +173,13 @@ Class User
 > 전체 이용가능 기능, 일정id로 해당 일정의 데이터를 불러옴.
 ![image](https://github.com/user-attachments/assets/93f987c0-457c-4df6-9bc9-e0eb7b7df252)
 
+</details>
+
 ## 댓글 기능
 
+<details>
+  <summary>펼쳐보기</summary>
+  
 ### 12. 댓글 추가
 > 로그인 필수, 요청 body에 일정id와 댓글 내용을 보내 댓글을 추가함.  
 ![image](https://github.com/user-attachments/assets/2c2cf8d6-86cf-4a57-aadf-c6d505f338ba)
@@ -185,6 +199,8 @@ Class User
 ### 16. 댓글 삭제
 > 로그인 필수, PathVarialbe로 댓글 id를 넘겨 해당 id의 댓글을 삭제  
 ![image](https://github.com/user-attachments/assets/1d3f8576-6360-44e4-94f8-098be5ab8d8f)
+
+</details>
 
 <a id="troubleshooting"></a>
 # ⚠️ 트러블 슈팅
