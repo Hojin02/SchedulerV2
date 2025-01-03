@@ -20,10 +20,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-//    @PostMapping
-//    public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto dto){
-//        return new ResponseEntity<>(userService.addUser(dto), HttpStatus.CREATED);
-//    }
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> registerUser(@Valid @RequestBody UserRequestDto dto){
         return new ResponseEntity<>(userService.addUser(dto), HttpStatus.CREATED);
@@ -59,7 +55,6 @@ public class UserController {
 
     @GetMapping("/logout")
     public ResponseEntity<Void>  logoutUser(){
-        System.out.println("??????????");
         userService.logout();
         return new ResponseEntity<>(HttpStatus.OK);
     }

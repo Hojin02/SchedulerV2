@@ -3,8 +3,6 @@ package com.example.schedulerv2.controller;
 import com.example.schedulerv2.dto.commentDto.CommentRequest;
 import com.example.schedulerv2.dto.commentDto.CommentResponseDto;
 import com.example.schedulerv2.dto.commentDto.CommentUpdateRequestDto;
-import com.example.schedulerv2.dto.scheduleDto.ScheduleRequestDto;
-import com.example.schedulerv2.dto.scheduleDto.ScheduleResponseDto;
 import com.example.schedulerv2.service.commentService.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
