@@ -66,14 +66,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto findUserById(Long id) {
-        User user = userRepository.findByIdOrElseThrow(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no user for this id."));
         return UserResponseDto.toDto(user);
     }
 
     @Transactional
     @Override
     public UserResponseDto modifyUserById(Long id, UserRequestDto dto) {
-        User user = userRepository.findByIdOrElseThrow(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no user for this id."));
         user.updateUserNameAndEmail(dto.getUserName(), dto.getEmail());
         em.flush();
         return UserResponseDto.toDto(user);
@@ -81,7 +83,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUserById(Long id) {
-        User user = userRepository.findByIdOrElseThrow(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no user for this id."));
         userRepository.delete(user);
         session.invalidate();
     }

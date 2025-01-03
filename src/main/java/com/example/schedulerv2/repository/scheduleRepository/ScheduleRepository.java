@@ -7,12 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
 
@@ -26,7 +22,4 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
             Pageable pageable
     );
 
-    default Schedule findByIdOrElseThrow(Long id){
-        return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no schedule for this id."));
-    }
 }
