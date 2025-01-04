@@ -5,17 +5,16 @@ import com.example.schedulerv2.dto.userDto.UserLoginRequestDto;
 import com.example.schedulerv2.dto.userDto.UserRequestDto;
 import com.example.schedulerv2.dto.userDto.UserResponseDto;
 import com.example.schedulerv2.entity.User;
+import com.example.schedulerv2.error.CustomException;
+import com.example.schedulerv2.error.errorCode.UserErrorCode;
 import com.example.schedulerv2.repository.userRepository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,10 +27,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto addUser(UserRequestDto dto) {
-        if(userRepository.existsByEmail(dto.getEmail())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"This email already exists.");
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new CustomException(UserErrorCode.HAS_EMAIL);
         }
-        String encodePassword=passwordEncoder.encode(dto.getPassword());
+        String encodePassword = passwordEncoder.encode(dto.getPassword());
         User user = userRepository.save(
                 new User(dto.getUserName(), dto.getEmail(), encodePassword)
         );
@@ -40,16 +39,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void loginUser(UserLoginRequestDto dto) {
-        Optional<User> optionalUser = userRepository.findByEmail(dto.getEmail());
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (passwordEncoder.matches(dto.getPassword(),user.getPassword())) {
-                session.setAttribute("userEmail",user.getEmail());
-            }
-        }else{
-           session.invalidate();
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new CustomException(UserErrorCode.INVALID_EMAIL_OR_PASSWORD));
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            throw new CustomException(UserErrorCode.INVALID_EMAIL_OR_PASSWORD);
         }
+        session.setAttribute("userEmail", user.getEmail());
     }
+
 
     public void logout() {
         session.invalidate();
@@ -67,7 +64,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto findUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no user for this id."));
+                .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
         return UserResponseDto.toDto(user);
     }
 
@@ -75,7 +72,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto modifyUserById(Long id, UserRequestDto dto) {
         User user = userRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no user for this id."));
+                .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
         user.updateUserNameAndEmail(dto.getUserName(), dto.getEmail());
         em.flush();
         return UserResponseDto.toDto(user);
@@ -84,7 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no user for this id."));
+                .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
         session.invalidate();
     }
