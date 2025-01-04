@@ -6,16 +6,18 @@ import com.example.schedulerv2.dto.commentDto.CommentUpdateRequestDto;
 import com.example.schedulerv2.entity.Comment;
 import com.example.schedulerv2.entity.Schedule;
 import com.example.schedulerv2.entity.User;
+import com.example.schedulerv2.error.CustomException;
+import com.example.schedulerv2.error.errorCode.CommentErrorCode;
+import com.example.schedulerv2.error.errorCode.ScheduleErrorCode;
+import com.example.schedulerv2.error.errorCode.UserErrorCode;
 import com.example.schedulerv2.repository.scheduleRepository.ScheduleRepository;
 import com.example.schedulerv2.repository.userRepository.UserRepository;
 import com.example.schedulerv2.repository.commentRepository.CommentReopsitory;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,9 +34,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponseDto addComment(CommentRequest dto) {
         Schedule schedule = scheduleRepository.findById(dto.getScheduleId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no schedule for this id."));
+                .orElseThrow(() -> new CustomException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
         User user = userRepository.findByEmail((String) session.getAttribute("userEmail"))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no user for this email."));
+                .orElseThrow(() -> new CustomException(UserErrorCode.LOGINED_USER_NOT_FOUND));
         Comment comment = commentReopsitory.save(
                 new Comment(dto.getContents(), schedule, user)
         );
@@ -44,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponseDto findCommentById(Long id) {
         Comment comment = commentReopsitory.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no Comment for this id."));
+                .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
         return CommentResponseDto.toDto(comment);
     }
 
@@ -52,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentResponseDto> findAllComment() {
         List<Comment> comments = commentReopsitory.findAll();
         if (comments.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There are no comments.");
+            throw new CustomException(CommentErrorCode.COMMENT_NOT_FOUND);
         }
 
         return comments.stream()
@@ -64,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public CommentResponseDto modifyCommentById(Long id, CommentUpdateRequestDto dto) {
         Comment comment = commentReopsitory.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no Comment for this id."));
+                .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
         comment.updateContents(dto.getContents());
         em.flush();
         return CommentResponseDto.toDto(comment);
@@ -73,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteCommentById(Long id) {
         Comment comment = commentReopsitory.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no Comment for this id."));
+                .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
         commentReopsitory.delete(comment);
     }
 }

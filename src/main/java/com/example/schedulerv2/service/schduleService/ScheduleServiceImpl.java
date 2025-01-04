@@ -2,6 +2,10 @@ package com.example.schedulerv2.service.schduleService;
 
 import com.example.schedulerv2.entity.Schedule;
 import com.example.schedulerv2.entity.User;
+import com.example.schedulerv2.error.CustomException;
+import com.example.schedulerv2.error.errorCode.ErrorCode;
+import com.example.schedulerv2.error.errorCode.ScheduleErrorCode;
+import com.example.schedulerv2.error.errorCode.UserErrorCode;
 import com.example.schedulerv2.repository.scheduleRepository.ScheduleRepository;
 import com.example.schedulerv2.dto.scheduleDto.ScheduleRequestDto;
 import com.example.schedulerv2.dto.scheduleDto.ScheduleResponseDto;
@@ -28,10 +32,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public ScheduleResponseDto addSchedule(ScheduleRequestDto dto) {
-        User user = userRepository.findByEmail((String)session.getAttribute("userEmail"))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no user for this email."));
+        User user = userRepository.findByEmail((String) session.getAttribute("userEmail"))
+                .orElseThrow(() -> new CustomException(UserErrorCode.LOGINED_USER_NOT_FOUND));
         Schedule savedSchedule = scheduleRepository.save(
-                new Schedule(dto.getTitle(), dto.getContents(),user)
+                new Schedule(dto.getTitle(), dto.getContents(), user)
         );
         ScheduleResponseDto resultDto = ScheduleResponseDto.toDto(savedSchedule);
         return resultDto;
@@ -44,7 +48,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         if (updatedAt != null && !updatedAt.isBlank()) {
             localDate = LocalDate.parse(updatedAt);
         }
-        Page<Schedule> schedules = scheduleRepository.findAllByTitleAndUpdatedAt(title, localDate,pageable);
+        Page<Schedule> schedules = scheduleRepository.findAllByTitleAndUpdatedAt(title, localDate, pageable);
 
         return schedules.map(ScheduleResponseDto::toDto);
     }
@@ -52,7 +56,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto findScheduleById(Long id) {
         Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no schedule for this id."));
+                .orElseThrow(() -> new CustomException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
         return ScheduleResponseDto.toDto(schedule);
     }
 
@@ -60,7 +64,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public ScheduleResponseDto modifyScheduleById(Long id, ScheduleRequestDto dto) {
         Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no schedule for this id."));
+                .orElseThrow(() -> new CustomException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
         schedule.UpdateTitleAndContents(dto);
         em.flush();//변경사항 즉시 반영
         return ScheduleResponseDto.toDto(schedule);
@@ -69,7 +73,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void deleteScheduleById(Long id) {
         Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no schedule for this id."));
+                .orElseThrow(() -> new CustomException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
         scheduleRepository.delete(schedule);
 
     }
