@@ -68,8 +68,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional //일정 수정
     public ScheduleResponseDto modifyScheduleById(Long id, ScheduleRequestDto dto) {
         // 일정 id로 일정 불러옴.
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+        Schedule schedule = ownerCheck(id); // 수정하고자 하는 일정이 본인의 글이 아닐경우 예외처리
         schedule.UpdateTitleAndContents(dto);
         em.flush();//변경사항 즉시 반영
         return ScheduleResponseDto.toDto(schedule);
@@ -77,12 +76,26 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override // 일정 삭제
     public void deleteScheduleById(Long id) {
-        // 일정 id로 일정 불러옴.
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+
+        Schedule schedule =  ownerCheck(id); // 삭제하고자 하는 일정이 본인의 글이 아닐경우 예외처리
         // 일정 삭제.
         scheduleRepository.delete(schedule);
 
+    }
+
+    // 수정 및 삭제 하려는 일정이 로그인한 본인의 글인지 확인.
+    public Schedule ownerCheck(Long scheduleId){
+        // 세션에서 로그인 된 유저의 id를 가져와 유저 불러옴.
+        User user = userRepository.findByEmail((String) session.getAttribute("userEmail"))
+                .orElseThrow(() -> new CustomException(UserErrorCode.LOGINED_USER_NOT_FOUND));
+        // 일정 id로 일정 불러옴.
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new CustomException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+        // 일정정보의 유저와 로그인 한 유저가 같은 지 확인.
+        if(!schedule.getUser().equals(user)){
+            throw new CustomException((ScheduleErrorCode.SCHEDULE_PERMISSION_DENIED));
+        }
+        return schedule;
     }
 
 
