@@ -20,40 +20,40 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/register")
+    @PostMapping("/register") // 회원가입 메소드
     public ResponseEntity<UserResponseDto> registerUser(@Valid @RequestBody UserRequestDto dto){
         return new ResponseEntity<>(userService.addUser(dto), HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login") // 로그인 메소드
     public ResponseEntity<Void> loginUser(@RequestBody UserLoginRequestDto dto,HttpSession session){
         userService.loginUser(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping // 전체 회원 조회 메소드
     public ResponseEntity<List<UserResponseDto>> findAllUser(){
         return new ResponseEntity<>(userService.findAllUser(),HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") // 단건 회원 조회 메소드
     public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id){
         return new ResponseEntity<>(userService.findUserById(id),HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}") // 회원정보 수정 매소드
     public ResponseEntity<UserResponseDto> modifyUserById(@PathVariable Long id, @RequestBody UserRequestDto dto){
         return new ResponseEntity<>(userService.modifyUserById(id,dto),HttpStatus.OK);
 
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")// 회원탈퇴 메소드
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id){
         userService.deleteUserById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/logout") // 로그아웃 메소드
     public ResponseEntity<Void>  logoutUser(){
         userService.logout();
         return new ResponseEntity<>(HttpStatus.OK);

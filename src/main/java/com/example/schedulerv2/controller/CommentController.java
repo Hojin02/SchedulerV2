@@ -19,26 +19,26 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping
+    @PostMapping// 댓글 작성 메소드
     public ResponseEntity<CommentResponseDto> addComment(@Valid @RequestBody CommentRequest dto) {
         return new ResponseEntity<>(commentService.addComment(dto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")// 댓글 단건 조회 메소드
     public ResponseEntity<CommentResponseDto> findCommentById(@PathVariable Long id){
         return new ResponseEntity<>(commentService.findCommentById(id),HttpStatus.OK);
     }
-    @GetMapping
+    @GetMapping// 전체 댓글 조회 메소드
     public ResponseEntity<List<CommentResponseDto>> findAllComment(){
         return new ResponseEntity<>(commentService.findAllComment(),HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}") // 댓글 수정 메소드
     public ResponseEntity<CommentResponseDto> modifyCommentById(@PathVariable Long id, @Valid @RequestBody CommentUpdateRequestDto dto){
         return new ResponseEntity<>(commentService.modifyCommentById(id,dto),HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") // 댓글 삭제 메소드
     public ResponseEntity<Void> deleteCommentById(@PathVariable Long id){
         commentService.deleteCommentById(id);
         return new ResponseEntity<>(HttpStatus.OK);

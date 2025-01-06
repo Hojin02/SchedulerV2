@@ -6,10 +6,10 @@ import com.example.schedulerv2.dto.commentDto.CommentUpdateRequestDto;
 import com.example.schedulerv2.entity.Comment;
 import com.example.schedulerv2.entity.Schedule;
 import com.example.schedulerv2.entity.User;
-import com.example.schedulerv2.error.CustomException;
-import com.example.schedulerv2.error.errorCode.CommentErrorCode;
-import com.example.schedulerv2.error.errorCode.ScheduleErrorCode;
-import com.example.schedulerv2.error.errorCode.UserErrorCode;
+import com.example.schedulerv2.common.error.CustomException;
+import com.example.schedulerv2.common.error.errorCode.CommentErrorCode;
+import com.example.schedulerv2.common.error.errorCode.ScheduleErrorCode;
+import com.example.schedulerv2.common.error.errorCode.UserErrorCode;
 import com.example.schedulerv2.repository.scheduleRepository.ScheduleRepository;
 import com.example.schedulerv2.repository.userRepository.UserRepository;
 import com.example.schedulerv2.repository.commentRepository.CommentReopsitory;
@@ -32,50 +32,58 @@ public class CommentServiceImpl implements CommentService {
     private final HttpSession session;
 
     @Override
-    public CommentResponseDto addComment(CommentRequest dto) {
+    public CommentResponseDto addComment(CommentRequest dto) {// 댓글 추가
+        // 일정 id로 일정 가져옴.
         Schedule schedule = scheduleRepository.findById(dto.getScheduleId())
                 .orElseThrow(() -> new CustomException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+        // 로그인 된 유저의 이메일로 유저 가져옴.
         User user = userRepository.findByEmail((String) session.getAttribute("userEmail"))
                 .orElseThrow(() -> new CustomException(UserErrorCode.LOGINED_USER_NOT_FOUND));
+        // 댓글 추가(댓글내용,일정,유저)
         Comment comment = commentReopsitory.save(
                 new Comment(dto.getContents(), schedule, user)
         );
+        // 추가된 댓글 정보 반환
         return CommentResponseDto.toDto(comment);
     }
 
-    @Override
+    @Override// 댓글 단건 조회
     public CommentResponseDto findCommentById(Long id) {
+        // 댓글 아이디로 해당 댓글 정보 불러옴.
         Comment comment = commentReopsitory.findById(id)
                 .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
+        // 단건의 댓글 정보를 DTO로 변환하여 반환
         return CommentResponseDto.toDto(comment);
     }
 
-    @Override
+    @Override // 전체 댓글 조회
     public List<CommentResponseDto> findAllComment() {
         List<Comment> comments = commentReopsitory.findAll();
         if (comments.isEmpty()) {
             throw new CustomException(CommentErrorCode.COMMENT_NOT_FOUND);
         }
-
+        // 댓글 목록을 반환
         return comments.stream()
                 .map(CommentResponseDto::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional
+    @Transactional // 댓글 수정 메소드
     public CommentResponseDto modifyCommentById(Long id, CommentUpdateRequestDto dto) {
-        Comment comment = commentReopsitory.findById(id)
+        Comment comment = commentReopsitory.findById(id) // 댓글 id를 이용하여 댓글 정보 불러옴.
                 .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
+        // 댓글 수정
         comment.updateContents(dto.getContents());
-        em.flush();
+        em.flush(); // 수정된 내용 즉시 반영
+        // 수정된 댓글 정보 반환
         return CommentResponseDto.toDto(comment);
     }
 
-    @Override
+    @Override // 댓글 삭제
     public void deleteCommentById(Long id) {
-        Comment comment = commentReopsitory.findById(id)
+        Comment comment = commentReopsitory.findById(id) // 댓글 id로 댓글 불러옴
                 .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
-        commentReopsitory.delete(comment);
+        commentReopsitory.delete(comment); // 댓글 삭제
     }
 }

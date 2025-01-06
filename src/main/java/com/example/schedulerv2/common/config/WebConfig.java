@@ -1,6 +1,6 @@
-package com.example.schedulerv2.config;
+package com.example.schedulerv2.common.config;
 
-import com.example.schedulerv2.filter.LoginFilter;
+import com.example.schedulerv2.common.filter.LoginFilter;
 import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

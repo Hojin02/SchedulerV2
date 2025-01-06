@@ -1,4 +1,4 @@
-package com.example.schedulerv2.error.errorCode;
+package com.example.schedulerv2.common.error.errorCode;
 
 
 import org.springframework.http.HttpStatus;

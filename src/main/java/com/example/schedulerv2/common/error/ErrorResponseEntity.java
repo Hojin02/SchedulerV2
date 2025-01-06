@@ -1,6 +1,6 @@
-package com.example.schedulerv2.error;
+package com.example.schedulerv2.common.error;
 
-import com.example.schedulerv2.error.errorCode.ErrorCode;
+import com.example.schedulerv2.common.error.errorCode.ErrorCode;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;

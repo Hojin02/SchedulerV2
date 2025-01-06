@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/schedules")
 public class ScheduleController {
     private final ScheduleService scheduleService;
-    @PostMapping
+    @PostMapping// 일정 추가 메소드
     public ResponseEntity<ScheduleResponseDto> addSchedule(@Valid  @RequestBody ScheduleRequestDto dto){
         return new ResponseEntity<>(scheduleService.addSchedule(dto), HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping// 일정 검색(전체조회) 메소드 (글 제목,수정일로 필터링)
     public ResponseEntity<Page<ScheduleResponseDto>>findAllByTitleAndModifiedDate(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String updatedAt,
@@ -33,17 +33,17 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.findAllByTitleAndModifiedDate(title,updatedAt,pageable),HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") // 일정 단건 조회 메소드
     public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id){
         return new ResponseEntity<>(scheduleService.findScheduleById(id),HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}") // 일정 수정 메소드
     public ResponseEntity<ScheduleResponseDto> modifyScheduleById(@PathVariable Long id,@Valid @RequestBody ScheduleRequestDto dto){
         return new ResponseEntity<>(scheduleService.modifyScheduleById(id,dto),HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") // 일정 삭제 메소드
     public ResponseEntity<Void> deleteScheduleById(@PathVariable Long id){
         scheduleService.deleteScheduleById(id);
         return new ResponseEntity<>(HttpStatus.OK);
