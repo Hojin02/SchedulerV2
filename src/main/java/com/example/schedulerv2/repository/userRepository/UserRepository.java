@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findByEmail(String email);
-    boolean existsByEmail(String email);
+    boolean existsByEmail(String email);//해당 이메일이 존재하는지 확인.
 }

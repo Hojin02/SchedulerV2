@@ -1,4 +1,4 @@
-package com.example.schedulerv2.error;
+package com.example.schedulerv2.common.error;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

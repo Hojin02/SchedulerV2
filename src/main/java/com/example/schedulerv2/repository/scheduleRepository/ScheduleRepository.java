@@ -16,7 +16,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
             + "(:title IS NULL OR s.title LIKE %:title%) "
             + "AND (:updatedAt IS NULL OR DATE(s.updatedAt) = :updatedAt)"
             + "ORDER BY s.updatedAt DESC")
-    Page<Schedule> findAllByTitleAndUpdatedAt(
+    Page<Schedule> findAllByTitleAndUpdatedAt( // 일정 제목, 수정일 기준으로 필터링하여 페이징 조회
             @Param("title") String title,
             @Param("updatedAt") LocalDate updatedAt,
             Pageable pageable

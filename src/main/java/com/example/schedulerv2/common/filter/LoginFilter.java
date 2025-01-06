@@ -1,4 +1,4 @@
-package com.example.schedulerv2.filter;
+package com.example.schedulerv2.common.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +10,7 @@ import org.springframework.util.PatternMatchUtils;
 import java.io.IOException;
 
 public class LoginFilter implements Filter {
-    private static final String[] WHITE_LIST = {"/", "/users/register","/users/login","/schedules*","/comments*"};
+    private static final String[] WHITE_LIST = {"/", "/users/register", "/users/login", "/schedules*", "/comments*"};
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
@@ -36,6 +36,8 @@ public class LoginFilter implements Filter {
     }
 
     private boolean isWhiteList(String requestURI, String method) {
+        // 일정 조회 및 댓글 조회는 로그인 상관없이 조회 가능함.
+        // GET방식은 모두 허용.
         Boolean isScheduleNonGetRequest = requestURI.startsWith("/schedules") && !"GET".equals(method);
         Boolean isCommentNonGetRequest = requestURI.startsWith("/comments") && !"GET".equals(method);
 
