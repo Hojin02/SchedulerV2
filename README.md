@@ -8,8 +8,9 @@
   -  - [유저](#유저-기능)
      - [일정](#일정-기능)
      - [댓글](#댓글-기능)
-  -  ⚠️ [트러블 슈팅](#troubleshooting)
-  -  😼 [후기](#review)
+-  ⚠️ [트러블 슈팅](#troubleshooting)
+-  😼 [후기](#review)
+-  🛠︎ [수정사항](#refactor)
 
 ## SchedulerV2 API 명세
 ![image](https://github.com/user-attachments/assets/3c74748e-4b0f-4207-bd75-27c8439cfd57)
@@ -270,3 +271,108 @@ jpa데이터 수정됨을 감지 후 자동으로 쿼리를 날려주는것도 �
 JPA를 학습하면서 새로운 기술(?)과 신세계를 많이 경험했다.
 리펙토링을 거쳐서 좀더 완벽한 프로젝트가 되도록 해야게따
 
+
+<a id="refactor"></a>
+# 🛠︎ 수정사항
+
+###  Enum형태로 error코드를 관리
+- 이전 코드에서는 new ResponseStatusException를 발생시켜 모든 에러를 따로 관리했지만.
+- 수정 후 에러 코드로 공통된 예러를 처리하고, 상황별 에러를 명확히 분리했다.
+- 또, 전역 예외 처리로 CustomException발생시 컨트롤러에서 에러를 잡아 상요자 친화적인 응답을 제공한다.
+
+```java
+@Getter
+@AllArgsConstructor
+public enum UserErrorCode implements ErrorCode {
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-001", "사용자를 찾을 수 없습니다."),
+    HAS_EMAIL(HttpStatus.BAD_REQUEST, "ACCOUNT-002", "이미 존재하는 이메일입니다."),
+    INVALID_EMAIL_OR_PASSWORD(HttpStatus.BAD_REQUEST, "ACCOUNT-003", "이메일 또는 비밀번호가 일치하지 않습니다."),
+    LOGINED_USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "ACCOUNT-004", "로그인한 사용자를 찾을 수 없습니다. 다시 로그인 해주세요.");
+
+    private final HttpStatus httpStatus;	// HttpStatus
+    private final String code;				// ACCOUNT-001
+    private final String message;			// 설명
+
+}
+```
+
+### 불필요한 코드 제거
+- 사용되지 않는 Import문 이나, 수정 후 주석으로 처리된 코드를 제거 항.
+
+### 관심사 분리(Repository에서 orElseThrow 없애기)
+- Repository는 DB와 소통 하는 부분이기 때문에 Exception은 비지니스 로직은 Service에서 처리 하도록 수정했다.
+-  Before(ScheduleRepository.java)  
+
+  ``` java
+   default Schedule findByIdOrElseThrow(Long id){
+        return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no schedule for this id."));
+    }
+  ```
+
+  - After (ScheduleServiceImpl.java)  
+
+   ```java
+   Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+    }
+  ```
+
+ ### 데이터 조회시  @Transactional(readOnly = true) 사용
+ - 성능최적화 : 읽기 전용 트랙잭션은 데이터 변경을 방지하므로, 불필요한 쓰기 락이 걸리지 않도록 함.
+ - 의도 명시 : 메서드가 데이터를 조회만 한다는 의도록 명확하게 명시.
+
+
+   -  Before(ScheduleServiceImpl.java)  
+
+  ``` java
+    @Override// 일정 단건조회
+    public ScheduleResponseDto findScheduleById(Long id) {
+        //일정 id를 이용하여 불러옴
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+        // 조회된 일정을 DTO타입으로 변환화여 반환
+        return ScheduleResponseDto.toDto(schedule);
+    }
+    
+  ```
+
+  - After (ScheduleServiceImpl.java)  
+
+   ```java
+    @Override// 일정 단건조회
+    @Transactional(readOnly = true)
+    public ScheduleResponseDto findScheduleById(Long id) {
+        :
+        :
+    }
+  ```
+
+ ### 로그인 한 사용자의 일정 또는 댓글만 수정 삭제 되도록 변경
+ - 이전 코드에서는 본인이 작성한 일정이나 댓글이 아니어도 id만 입력받아 수정 삭제 되게끔 했지만,
+ - 작성하려는 일정 또는 댓글이 로그인 한 사용자가 작성한게 아니라면 에러처리되도록 수정하였다.
+
+```java
+public Schedule ownerCheck(Long scheduleId){
+        // 세션에서 로그인 된 유저의 id를 가져와 유저 불러옴.
+        User user = userRepository.findByEmail((String) session.getAttribute("userEmail"))
+                .orElseThrow(() -> new CustomException(UserErrorCode.LOGINED_USER_NOT_FOUND));
+        // 일정 id로 일정 불러옴.
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new CustomException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+        // 일정정보의 유저와 로그인 한 유저가 같은 지 확인.
+        if(!schedule.getUser().equals(user)){
+            throw new CustomException((ScheduleErrorCode.SCHEDULE_PERMISSION_DENIED));
+        }
+        return schedule;
+    }
+
+@Override
+    @Transactional //일정 수정
+    public ScheduleResponseDto modifyScheduleById(Long id, ScheduleRequestDto dto) {
+        // 일정 id로 일정 불러옴.
+        Schedule schedule = ownerCheck(id); // 수정하고자 하는 일정이 본인의 글이 아닐경우 예외처리
+        schedule.UpdateTitleAndContents(dto);
+        em.flush();//변경사항 즉시 반영
+        return ScheduleResponseDto.toDto(schedule);
+    }
+```
