@@ -42,6 +42,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ScheduleResponseDto> findAllByTitleAndModifiedDate(String title, String updatedAt, Pageable pageable) {
         LocalDate localDate = null;
         // 파라미터로 수정일이 넘어올경우 LocalDate으로 형변환.
@@ -54,6 +55,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override// 일정 단건조회
+    @Transactional(readOnly = true)
     public ScheduleResponseDto findScheduleById(Long id) {
         //일정 id를 이용하여 불러옴
         Schedule schedule = scheduleRepository.findById(id)

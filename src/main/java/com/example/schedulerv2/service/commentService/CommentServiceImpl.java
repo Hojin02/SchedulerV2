@@ -48,6 +48,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override// 댓글 단건 조회
+    @Transactional(readOnly = true)
     public CommentResponseDto findCommentById(Long id) {
         // 댓글 아이디로 해당 댓글 정보 불러옴.
         Comment comment = commentReopsitory.findById(id)
@@ -57,6 +58,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override // 전체 댓글 조회
+    @Transactional(readOnly = true)
     public List<CommentResponseDto> findAllComment() {
         List<Comment> comments = commentReopsitory.findAll();
         if (comments.isEmpty()) {

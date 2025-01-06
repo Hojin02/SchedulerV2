@@ -59,6 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override // 유저정보 조회.
+    @Transactional(readOnly = true)
     public List<UserResponseDto> findAllUser() {
         List<User> users = userRepository.findAll();
         return users.stream()
@@ -68,6 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override // 유저 단건 조회
+    @Transactional(readOnly = true)
     public UserResponseDto findUserById(Long id) {
         // id로 유저의 단건 정보 조회
         User user = userRepository.findById(id)
