@@ -11,6 +11,7 @@
 -  ⚠️ [트러블 슈팅](#troubleshooting)
 -  😼 [후기](#review)
 -  🛠︎ [수정사항](#refactor)
+-  [수정후기](#refactorreview)
 
 ## SchedulerV2 API 명세
 ![image](https://github.com/user-attachments/assets/3c74748e-4b0f-4207-bd75-27c8439cfd57)
@@ -376,3 +377,11 @@ public Schedule ownerCheck(Long scheduleId){
         return ScheduleResponseDto.toDto(schedule);
     }
 ```
+<a id="refactorreview"></a>
+# 수정 후기
+ 이번과제에서는 몸살+게으름 이슈로 도전 기능도 못했다... (아직도 힘듬...)
+ 이번주는 정신 꽉잡고 저번주 못했던 공부와 프로젝트 같이 병행해야게따...ㅠ
+ 
+ 뉴스피드 팀 프로젝트 이후로 실력이 많이 늘어난거같다!
+ 팀프로젝트에서 도메인 별로 패키징 하는법을 알게되었고, 이번 과제에서는 에러코드를 사용하여 예외 처리하는 방법도 써봤다.
+ 점점 갈수록 완벽해 지는 너낌..? JWT랑 test코드 부분을 좀더 공부해서 더더 완벽한 프로젝트를 완성할 수 있도록 좀더 열심히.. 공부해야겠다..
